@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国広日和</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5ff;
+  --surface: #ffffff;
+  --surface2: #f0eeff;
+  --accent: #7c6ef5;
+  --accent2: #b5acff;
+  --accent3: #ffd6f5;
+  --pink: #ff87c3;
+  --mint: #6ee7c7;
+  --text: #1e1b2e;
+  --text2: #7b7899;
+  --text3: #b0adc8;
+  --border: rgba(124,110,245,0.12);
+  --shadow-sm: 0 2px 12px rgba(124,110,245,0.08);
+  --shadow: 0 8px 32px rgba(124,110,245,0.13);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed; bottom:0; left:0; right:0;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; z-index: 200;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 24px rgba(124,110,245,0.08);
+}
+.nav-btn {
+  flex:1; background:none; border:none;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:6px 4px; cursor:pointer; transition:all 0.2s;
+}
+.nav-btn .nav-icon {
+  width:36px; height:36px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.15rem; transition:all 0.2s;
+}
+.nav-btn .nav-label { font-size:0.65rem; color:var(--text3); font-weight:500; transition:color 0.2s; }
+.nav-btn.active .nav-icon { background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 4px 12px rgba(124,110,245,0.35); }
+.nav-btn.active .nav-label { color:var(--accent); }
+/* SECTIONS */
+.section { display:none; animation:fadeUp 0.25s ease; }
+.section.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.page { max-width:480px; margin:0 auto; padding:0 16px; }
+/* HOME HERO */
+.home-hero {
+  background: linear-gradient(145deg,#7c6ef5 0%,#b5acff 55%,#ffd6f5 100%);
+  border-radius: 0 0 32px 32px;
+  padding: 52px 24px 32px;
+  text-align: center; position:relative; overflow:hidden;
+  margin-bottom:24px;
+}
+.home-hero::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 60%);
+}
+.hero-date {
+  font-family:'DM Sans',sans-serif; font-size:3rem; font-weight:300;
+  color:white; letter-spacing:-1px; line-height:1; position:relative;
+}
+.hero-weekday { font-size:0.85rem; color:rgba(255,255,255,0.72); margin-top:6px; position:relative; }
+/* TICKER */
+.ticker-wrap {
+  position:relative; margin-top:18px;
+  background:rgba(255,255,255,0.18);
+  border-radius:40px; padding:9px 18px;
+  display:flex; align-items:center; gap:10px;
+  backdrop-filter:blur(8px);
+}
+.ticker-avatar {
+  width:26px; height:26px; border-radius:50%;
+  background:white; display:flex; align-items:center; justify-content:center;
+  font-size:0.8rem; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.ticker-overflow {
+  overflow:hidden; flex:1;
+  mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent);
+  -webkit-mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent);
+}
+.ticker-inner {
+  display:inline-flex; white-space:nowrap;
+  animation:tickerScroll 16s linear infinite;
+}
+.ticker-text { font-size:0.8rem; color:white; padding-right:64px; }
+@keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+/* QUICK CARDS */
+.quick-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:20px; }
+.quick-card {
+  background:var(--surface); border-radius:var(--radius); padding:20px 16px;
+  cursor:pointer; transition:transform 0.15s,box-shadow 0.15s;
+  box-shadow:var(--shadow-sm); border:1px solid var(--border); position:relative; overflow:hidden;
+}
+.quick-card::before { content:''; position:absolute; top:-20px; right:-20px; width:70px; height:70px; border-radius:50%; opacity:0.1; }
+.quick-card:nth-child(1)::before { background:var(--mint); }
+.quick-card:nth-child(2)::before { background:var(--accent); }
+.quick-card:nth-child(3)::before { background:var(--pink); }
+.quick-card:nth-child(4)::before { background:#ffd700; }
+.quick-card:hover { transform:translateY(-3px); box-shadow:var(--shadow); }
+.quick-card:active { transform:scale(0.97); }
+.qc-icon { font-size:1.5rem; margin-bottom:10px; }
+.qc-label { font-size:0.72rem; color:var(--text2); font-weight:500; }
+.qc-value { font-family:'DM Sans',sans-serif; font-size:1.3rem; font-weight:600; color:var(--text); margin-top:3px; }
+/* PAGE HEADER */
+.page-header { padding:28px 0 16px; }
+.page-title { font-size:1.5rem; font-weight:700; color:var(--text); letter-spacing:-0.02em; }
+.page-sub { font-size:0.82rem; color:var(--text2); margin-top:4px; }
+/* CARD */
+.card { background:var(--surface); border-radius:var(--radius); padding:20px; margin-bottom:14px; box-shadow:var(--shadow-sm); border:1px solid var(--border); }
+.card-heading {
+  font-size:0.72rem; font-weight:700; color:var(--text2); letter-spacing:0.1em;
+  text-transform:uppercase; margin-bottom:14px;
+  display:flex; align-items:center; gap:8px;
+}
+.card-heading::after { content:''; flex:1; height:1px; background:var(--border); }
+/* INPUTS */
+.form-row { margin-bottom:11px; }
+.form-label { font-size:0.76rem; font-weight:600; color:var(--text2); margin-bottom:5px; display:block; letter-spacing:0.03em; }
+.input {
+  width:100%; padding:11px 14px;
+  background:var(--surface2); border:1.5px solid transparent;
+  border-radius:var(--radius-sm); font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:0.88rem; color:var(--text); transition:all 0.15s; outline:none; appearance:none;
+}
+.input:focus { border-color:var(--accent); background:white; box-shadow:0 0 0 4px rgba(124,110,245,0.1); }
+.input::placeholder { color:var(--text3); }
+.input-row { display:flex; gap:8px; }
+.input-row .input { flex:1; }
+/* BUTTONS */
+.btn {
+  background:linear-gradient(135deg,var(--accent),#a08cff);
+  color:white; border:none; border-radius:100px; padding:11px 22px;
+  font-family:'Zen Kaku Gothic New',sans-serif; font-size:0.86rem; font-weight:700;
+  cursor:pointer; transition:all 0.15s; box-shadow:0 4px 14px rgba(124,110,245,0.3); white-space:nowrap;
+}
+.btn:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(124,110,245,0.4); }
+.btn:active { transform:scale(0.97); }
+.btn-sm { padding:7px 14px; font-size:0.76rem; }
+.btn-danger { background:linear-gradient(135deg,#ff6b8a,#ff4d77); box-shadow:0 4px 14px rgba(255,77,119,0.25); }
+.btn-row { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; }
+/* CALENDAR */
+.cal-nav-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.cal-month-title { font-size:1.05rem; font-weight:700; color:var(--text); }
+.cal-arrow {
+  width:32px; height:32px; border-radius:50%; background:var(--surface2); border:none;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:1rem; color:var(--text2); transition:all 0.15s;
+}
+.cal-arrow:hover { background:var(--accent); color:white; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; }
+.cal-dn { font-size:0.68rem; font-weight:700; color:var(--text3); padding:4px 0 8px; letter-spacing:0.05em; }
+.cal-day {
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; font-size:0.8rem; cursor:pointer; transition:all 0.15s; position:relative; font-weight:500;
+}
+.cal-day:hover { background:var(--surface2); }
+.cal-day.today { background:linear-gradient(135deg,var(--accent),#a08cff); color:white; font-weight:700; box-shadow:0 4px 10px rgba(124,110,245,0.35); }
+.cal-day.has-event::after { content:''; position:absolute; bottom:2px; width:4px; height:4px; border-radius:50%; background:var(--pink); }
+.cal-day.today.has-event::after { background:white; }
+.cal-day.other-month { color:var(--text3); font-weight:400; }
+.cal-day.sunday { color:var(--pink); }
+.cal-day.today.sunday { color:white; }
+.event-pill {
+  display:flex; align-items:center; gap:10px; padding:11px 12px;
+  background:var(--surface2); border-radius:var(--radius-sm); margin-bottom:7px; transition:all 0.15s;
+}
+.event-pill:hover { background:#eae7ff; }
+.event-dot { width:7px; height:7px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--pink)); flex-shrink:0; }
+.event-pill-date { font-size:0.7rem; font-weight:700; color:var(--accent); min-width:36px; }
+.event-pill-title { flex:1; font-size:0.86rem; font-weight:500; }
+.event-pill-time { font-size:0.7rem; color:var(--text3); }
+/* TODO */
+.todo-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); animation:fadeUp 0.2s ease; }
+.todo-item:last-child { border-bottom:none; }
+.todo-check { width:23px; height:23px; border-radius:7px; border:2px solid var(--accent2); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+.todo-check.done { background:linear-gradient(135deg,var(--accent),#a08cff); border-color:transparent; }
+.todo-check.done::after { content:'✓'; color:white; font-size:0.7rem; font-weight:700; }
+.todo-text { flex:1; font-size:0.88rem; transition:all 0.2s; }
+.todo-text.done { text-decoration:line-through; color:var(--text3); }
+.todo-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:1rem; padding:4px; border-radius:6px; transition:all 0.15s; }
+.todo-del:hover { color:var(--pink); background:rgba(255,135,195,0.1); }
+.progress-bar-wrap { height:4px; background:var(--surface2); border-radius:10px; overflow:hidden; margin-bottom:14px; }
+.progress-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--pink)); border-radius:10px; transition:width 0.4s cubic-bezier(0.4,0,0.2,1); }
+/* KAKEIBO */
+.k-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
+.k-stat { background:var(--surface2); border-radius:var(--radius-sm); padding:12px 8px; text-align:center; }
+.k-stat-label { font-size:0.66rem; font-weight:700; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; }
+.k-stat-val { font-family:'DM Sans',sans-serif; font-size:1.05rem; font-weight:700; margin-top:4px; }
+.k-stat-val.income { color:var(--accent); }
+.k-stat-val.expense { color:var(--pink); }
+.k-stat-val.bal-pos { color:#5dd8b0; }
+.k-stat-val.bal-neg { color:var(--pink); }
+.k-item { display:flex; align-items:center; gap:9px; padding:10px 0; border-bottom:1px solid var(--border); font-size:0.84rem; }
+.k-item:last-child { border-bottom:none; }
+.k-cat-tag { background:var(--surface2); border-radius:8px; padding:3px 8px; font-size:0.68rem; font-weight:600; color:var(--text2); white-space:nowrap; }
+.k-item-name { flex:1; color:var(--text); }
+.k-item-date { font-size:0.68rem; color:var(--text3); }
+.k-amount { font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.92rem; white-space:nowrap; }
+.k-amount.income { color:var(--accent); }
+.k-amount.expense { color:var(--pink); }
+.k-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+/* DIARY */
+.mood-grid { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:13px; }
+.mood-chip { background:var(--surface2); border:1.5px solid transparent; border-radius:100px; padding:7px 13px; font-size:0.8rem; cursor:pointer; transition:all 0.15s; font-family:'Zen Kaku Gothic New',sans-serif; color:var(--text2); font-weight:500; }
+.mood-chip:hover { border-color:var(--accent2); }
+.mood-chip.selected { background:linear-gradient(135deg,var(--accent),#a08cff); color:white; border-color:transparent; box-shadow:0 4px 12px rgba(124,110,245,0.3); }
+.diary-textarea { width:100%; min-height:128px; padding:13px 14px; background:var(--surface2); border:1.5px solid transparent; border-radius:var(--radius-sm); font-family:'Zen Kaku Gothic New',sans-serif; font-size:0.88rem; line-height:1.8; color:var(--text); resize:vertical; transition:all 0.15s; outline:none; margin-bottom:11px; }
+.diary-textarea:focus { border-color:var(--accent); background:white; box-shadow:0 0 0 4px rgba(124,110,245,0.1); }
+.diary-textarea::placeholder { color:var(--text3); }
+.diary-entry { background:var(--surface); border-radius:var(--radius); padding:18px; margin-bottom:12px; box-shadow:var(--shadow-sm); border:1px solid var(--border); animation:fadeUp 0.3s ease; }
+.diary-entry-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.diary-entry-date { font-size:0.72rem; font-weight:700; color:var(--text2); letter-spacing:0.04em; }
+.diary-entry-meta { display:flex; gap:7px; align-items:center; }
+.diary-mood-badge { background:var(--surface2); border-radius:100px; padding:3px 10px; font-size:0.7rem; color:var(--text2); }
+.diary-entry-text { font-size:0.86rem; line-height:1.8; color:var(--text); white-space:pre-wrap; margin-bottom:13px; }
+.horikawa-reply { display:flex; gap:10px; padding:12px 13px; background:linear-gradient(135deg,rgba(124,110,245,0.06),rgba(181,172,255,0.08)); border-radius:var(--radius-sm); border:1px solid rgba(124,110,245,0.12); }
+.reply-avatar { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:0.8rem; flex-shrink:0; box-shadow:0 2px 8px rgba(124,110,245,0.25); }
+.reply-body { flex:1; }
+.reply-name { font-size:0.66rem; font-weight:700; color:var(--accent); margin-bottom:4px; letter-spacing:0.05em; }
+.reply-text { font-size:0.82rem; line-height:1.7; color:var(--text); font-style:italic; }
+/* HORI MINI */
+.hori-mini { background:linear-gradient(135deg,rgba(124,110,245,0.07),rgba(255,214,245,0.12)); border-radius:var(--radius); padding:15px 17px; display:flex; gap:11px; align-items:flex-start; border:1px solid rgba(124,110,245,0.11); margin-bottom:14px; }
+.hori-mini-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:0.95rem; flex-shrink:0; box-shadow:0 3px 10px rgba(124,110,245,0.25); }
+.hori-mini-text { font-size:0.83rem; line-height:1.7; color:var(--text); font-style:italic; }
+/* LOADING DOTS */
+.dot-loading { display:inline-flex; gap:4px; align-items:center; vertical-align:middle; margin-right:6px; }
+.dot-loading span { width:5px; height:5px; border-radius:50%; background:var(--accent2); animation:dotPulse 1.4s infinite; }
+.dot-loading span:nth-child(2) { animation-delay:0.2s; }
+.dot-loading span:nth-child(3) { animation-delay:0.4s; }
+@keyframes dotPulse { 0%,80%,100%{transform:scale(0.6);opacity:0.3} 40%{transform:scale(1);opacity:1} }
+/* SHOPPING */
+.shop-categories { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+.shop-cat-chip {
+  background:var(--surface2); border:1.5px solid transparent;
+  border-radius:100px; padding:6px 13px; font-size:0.78rem;
+  cursor:pointer; transition:all 0.15s; font-family:'Zen Kaku Gothic New',sans-serif;
+  color:var(--text2); font-weight:500;
+}
+.shop-cat-chip:hover { border-color:var(--accent2); }
+.shop-cat-chip.active { background:linear-gradient(135deg,var(--accent),#a08cff); color:white; border-color:transparent; box-shadow:0 3px 10px rgba(124,110,245,0.25); }
+
+.shop-item {
+  display:flex; align-items:center; gap:11px;
+  padding:12px 0; border-bottom:1px solid var(--border);
+  animation:fadeUp 0.2s ease;
+}
+.shop-item:last-child { border-bottom:none; }
+.shop-check {
+  width:23px; height:23px; border-radius:50%;
+  border:2px solid var(--accent2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:all 0.2s;
+}
+.shop-check.checked { background:linear-gradient(135deg,var(--mint),#3ecfac); border-color:transparent; }
+.shop-check.checked::after { content:'✓'; color:white; font-size:0.7rem; font-weight:700; }
+.shop-item-info { flex:1; }
+.shop-item-name { font-size:0.88rem; transition:all 0.2s; }
+.shop-item-name.checked { text-decoration:line-through; color:var(--text3); }
+.shop-item-cat-tag { font-size:0.68rem; color:var(--text3); margin-top:2px; }
+.shop-qty {
+  display:flex; align-items:center; gap:7px;
+}
+.shop-qty-btn {
+  width:26px; height:26px; border-radius:50%;
+  background:var(--surface2); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; color:var(--text2); transition:all 0.15s; font-weight:700;
+}
+.shop-qty-btn:hover { background:var(--accent); color:white; }
+.shop-qty-num { font-size:0.85rem; font-weight:600; min-width:18px; text-align:center; color:var(--text); }
+
+.shop-divider {
+  display:flex; align-items:center; justify-content:space-between;
+  margin:14px 0 10px; padding-top:14px; border-top:1px solid var(--border);
+  font-size:0.72rem; font-weight:700; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase;
+}
+.shop-clear-done-btn {
+  background:none; border:1px solid var(--border); border-radius:100px;
+  padding:4px 11px; font-size:0.7rem; color:var(--text3); cursor:pointer;
+  font-family:'Zen Kaku Gothic New',sans-serif; transition:all 0.15s;
+}
+.shop-clear-done-btn:hover { border-color:var(--pink); color:var(--pink); }
+
+/* UTILS */
+.empty-state { text-align:center; padding:28px; color:var(--text3); font-size:0.86rem; }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="section active" id="section-home">
+  <div class="home-hero">
+    <div class="hero-date" id="home-date">—</div>
+    <div class="hero-weekday" id="home-weekday">—</div>
+    <div class="ticker-wrap">
+      <div class="ticker-avatar">⚔️</div>
+      <div class="ticker-overflow">
+        <div class="ticker-inner" id="ticker-inner">
+          <span class="ticker-text" id="ticker-t1"></span>
+          <span class="ticker-text" id="ticker-t2"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page">
+    <div class="quick-grid">
+      <div class="quick-card" onclick="showSection('todo')">
+        <div class="qc-icon">✅</div>
+        <div class="qc-label">今日のToDo</div>
+        <div class="qc-value" id="qc-todo">0件</div>
+      </div>
+      <div class="quick-card" onclick="showSection('calendar')">
+        <div class="qc-icon">📅</div>
+        <div class="qc-label">今月の予定</div>
+        <div class="qc-value" id="qc-events">0件</div>
+      </div>
+      <div class="quick-card" onclick="showSection('kakeibo')">
+        <div class="qc-icon">💴</div>
+        <div class="qc-label">今月の残高</div>
+        <div class="qc-value" id="qc-balance">¥0</div>
+      </div>
+      <div class="quick-card" onclick="showSection('diary')">
+        <div class="qc-icon">📖</div>
+        <div class="qc-label">日記の記録</div>
+        <div class="qc-value" id="qc-diary">0件</div>
+      </div>
+      <div class="quick-card" onclick="showSection('shopping')" style="grid-column:span 2;">
+        <div class="qc-icon">🛒</div>
+        <div class="qc-label">買い物リスト</div>
+        <div class="qc-value" id="qc-shopping">0件</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div class="section" id="section-calendar">
+  <div class="page">
+    <div class="page-header"><div class="page-title">カレンダー</div><div class="page-sub">予定を管理しましょう</div></div>
+    <div class="card">
+      <div class="cal-nav-row">
+        <button class="cal-arrow" onclick="changeMonth(-1)">‹</button>
+        <div class="cal-month-title" id="cal-month-title">—</div>
+        <button class="cal-arrow" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div class="card">
+      <div class="card-heading">今月の予定</div>
+      <div id="events-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-heading">予定を追加</div>
+      <div class="form-row"><label class="form-label">タイトル</label><input class="input" id="event-title" placeholder="例：通院、友人との約束…"></div>
+      <div class="form-row"><label class="form-label">日付</label><input class="input" type="date" id="event-date"></div>
+      <div class="form-row"><label class="form-label">時間（任意）</label><input class="input" type="time" id="event-time"></div>
+      <div class="btn-row"><button class="btn" onclick="addEvent()">追加する</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- TODO -->
+<div class="section" id="section-todo">
+  <div class="page">
+    <div class="page-header"><div class="page-title">ToDo</div><div class="page-sub">一つずつ片付けていきましょう</div></div>
+    <div class="card">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="todo-prog" style="width:0%"></div></div>
+      <div class="input-row" style="margin-bottom:14px;">
+        <input class="input" id="todo-input" placeholder="やることを入力…" onkeypress="if(event.key==='Enter')addTodo()">
+        <button class="btn" onclick="addTodo()">追加</button>
+      </div>
+      <div id="todo-list"></div>
+    </div>
+    <div class="hori-mini">
+      <div class="hori-mini-avatar">⚔️</div>
+      <div class="hori-mini-text" id="todo-msg">タスクを完了したら声をかけますね。</div>
+    </div>
+  </div>
+</div>
+
+<!-- KAKEIBO -->
+<div class="section" id="section-kakeibo">
+  <div class="page">
+    <div class="page-header"><div class="page-title">家計簿</div><div class="page-sub" id="k-sub">今月の収支</div></div>
+    <div class="card">
+      <div class="k-summary">
+        <div class="k-stat"><div class="k-stat-label">収入</div><div class="k-stat-val income" id="k-income">¥0</div></div>
+        <div class="k-stat"><div class="k-stat-label">支出</div><div class="k-stat-val expense" id="k-expense">¥0</div></div>
+        <div class="k-stat"><div class="k-stat-label">残高</div><div class="k-stat-val" id="k-balance">¥0</div></div>
+      </div>
+      <div id="kakeibo-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-heading">記録する</div>
+      <div class="form-row"><label class="form-label">種別</label><select class="input" id="k-type"><option value="expense">支出</option><option value="income">収入</option></select></div>
+      <div class="k-form-grid">
+        <div class="form-row"><label class="form-label">カテゴリ</label><select class="input" id="k-cat"><option>食費</option><option>交通費</option><option>日用品</option><option>娯楽</option><option>医療費</option><option>衣服</option><option>給料</option><option>その他</option></select></div>
+        <div class="form-row"><label class="form-label">金額（円）</label><input class="input" type="number" id="k-amount" placeholder="0"></div>
+      </div>
+      <div class="form-row"><label class="form-label">メモ（任意）</label><input class="input" id="k-memo" placeholder="例：スーパーで買い物"></div>
+      <div class="btn-row"><button class="btn" onclick="addKakeibo()">記録する</button></div>
+    </div>
+    <div class="hori-mini">
+      <div class="hori-mini-avatar">⚔️</div>
+      <div class="hori-mini-text" id="k-msg">買いすぎはいけませんよ。でも、たまのご褒美は大切ですね。</div>
+    </div>
+  </div>
+</div>
+
+<!-- DIARY -->
+<div class="section" id="section-diary">
+  <div class="page">
+    <div class="page-header"><div class="page-title">日記</div><div class="page-sub">今日のことを書いてみて</div></div>
+    <div class="card">
+      <div class="card-heading">今日の気分</div>
+      <div class="mood-grid">
+        <button class="mood-chip" onclick="selectMood(this,'😊 元気')">😊 元気</button>
+        <button class="mood-chip" onclick="selectMood(this,'😐 普通')">😐 普通</button>
+        <button class="mood-chip" onclick="selectMood(this,'😴 疲れた')">😴 疲れた</button>
+        <button class="mood-chip" onclick="selectMood(this,'😔 しんどい')">😔 しんどい</button>
+        <button class="mood-chip" onclick="selectMood(this,'🥰 幸せ')">🥰 幸せ</button>
+      </div>
+      <textarea class="diary-textarea" id="diary-input" placeholder="今日あったことを書いてみて。堀川くんがコメントしてくれます…"></textarea>
+      <div class="btn-row"><button class="btn" onclick="addDiary()">書き留める</button></div>
+    </div>
+    <div id="diary-list"></div>
+  </div>
+</div>
+
+<!-- SHOPPING -->
+<div class="section" id="section-shopping">
+  <div class="page">
+    <div class="page-header"><div class="page-title">買い物リスト</div><div class="page-sub">必要なものをまとめておきましょう</div></div>
+
+    <div class="card">
+      <div class="input-row" style="margin-bottom:14px;">
+        <input class="input" id="shop-input" placeholder="例：牛乳、卵、シャンプー…" onkeypress="if(event.key==='Enter')addShopItem()">
+        <button class="btn" onclick="addShopItem()">追加</button>
+      </div>
+      <div class="shop-categories" id="shop-categories"></div>
+      <div id="shop-list"></div>
+      <div id="shop-checked-section" style="display:none;">
+        <div class="shop-divider">
+          <span>カート済み</span>
+          <button class="shop-clear-done-btn" onclick="clearCheckedItems()">まとめて削除</button>
+        </div>
+        <div id="shop-checked-list"></div>
+      </div>
+    </div>
+
+    <div class="hori-mini">
+      <div class="hori-mini-avatar">⚔️</div>
+      <div class="hori-mini-text" id="shop-msg">買いすぎに注意しながら、必要なものをそろえましょうね。</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="showSection('home')"><div class="nav-icon">🏠</div><span class="nav-label">ホーム</span></button>
+  <button class="nav-btn" onclick="showSection('calendar')"><div class="nav-icon">📅</div><span class="nav-label">カレンダー</span></button>
+  <button class="nav-btn" onclick="showSection('todo')"><div class="nav-icon">✅</div><span class="nav-label">ToDo</span></button>
+  <button class="nav-btn" onclick="showSection('kakeibo')"><div class="nav-icon">💴</div><span class="nav-label">家計簿</span></button>
+  <button class="nav-btn" onclick="showSection('diary')"><div class="nav-icon">📖</div><span class="nav-label">日記</span></button>
+  <button class="nav-btn" onclick="showSection('shopping')"><div class="nav-icon">🛒</div><span class="nav-label">買い物</span></button>
+</nav>
+
+<script>
+// STATE
+let state={events:[],todos:[],kakeibo:[],diary:[],shopping:[],calYear:new Date().getFullYear(),calMonth:new Date().getMonth()};
+try{const s=localStorage.getItem('kokuniwa-v2');if(s){const p=JSON.parse(s);state={...state,...p,calYear:new Date().getFullYear(),calMonth:new Date().getMonth()};}}catch(e){}
+function save(){try{localStorage.setItem('kokuniwa-v2',JSON.stringify(state));}catch(e){}}
+
+// MESSAGES
+const GM={
+  morning:["おはようございます！今日も一日、しっかりやっていきましょう。空いた時間がもったいないですからね。","おはようございます。朝ごはんは食べましたか？体を大切にしないといけませんよ。","おはよう！今日も後方支援は任せてください。"],
+  afternoon:["お昼ですね。ちゃんと休憩、取れていますか？無理は禁物ですよ。","午後も頑張りましょう！こういうお手伝いも任せて！","お疲れ様です。少し一息ついてから、また動きましょうね。"],
+  evening:["お疲れ様でした。今日はよく頑張りましたね。","夜ですね。今日のことを振り返ってみませんか。日記に書き留めておくと良いですよ。","一日お疲れ様です。ゆっくり休んでくださいね。"],
+  night:["夜更かしはいけませんよ。早めに休みましょうね。","もうこんな時間です。今日もお疲れ様でした。明日も一緒に頑張りましょう。"]
+};
+function getGreeting(){const h=new Date().getHours();const p=h<11?GM.morning:h<17?GM.afternoon:h<21?GM.evening:GM.night;return p[Math.floor(Math.random()*p.length)];}
+function getDiaryComment(t,m){const c=[`「${m||'今日'}」…なんだか伝わってくるものがありますね。ちゃんと聞こえていますよ。`,"書いてくれてありがとうございます。こうやって言葉にすること、大切なことだと思います。","うん、お疲れ様でした。明日もまた一緒に頑張りましょうね。","読みました。……それで、少し楽になれましたか？","正直に書いてくれると、僕も嬉しいです。一人じゃないですからね。","今日のことを残しておくの、いいことだと思います。後から読み返すと、また気づきがあったりしますよ。"];return c[Math.floor(Math.random()*c.length)];}
+
+// TICKER
+let tickerPool=[];
+function buildPool(){const h=new Date().getHours();const p=h<11?GM.morning:h<17?GM.afternoon:h<21?GM.evening:GM.night;return [...p].sort(()=>Math.random()-0.5);}
+function setTickerMsg(msg){
+  document.getElementById('ticker-t1').textContent=msg;
+  document.getElementById('ticker-t2').textContent=msg;
+  const el=document.getElementById('ticker-inner');
+  const dur=Math.max(10,msg.length*0.42);
+  el.style.animation='none';el.offsetHeight;
+  el.style.animation=`tickerScroll ${dur}s linear infinite`;
+}
+function rotateTicker(){
+  if(!tickerPool.length)tickerPool=buildPool();
+  setTickerMsg(tickerPool.shift());
+}
+rotateTicker();
+setInterval(rotateTicker,16000);
+
+// NAV
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  const map={home:0,calendar:1,todo:2,kakeibo:3,diary:4,shopping:5};
+  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  if(id==='home')renderHome();
+  if(id==='calendar')renderCalendar();
+  if(id==='todo')renderTodo();
+  if(id==='kakeibo')renderKakeibo();
+  if(id==='diary')renderDiary();
+  if(id==='shopping')renderShopping();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// HOME
+function renderHome(){
+  const now=new Date();
+  const days=['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'];
+  document.getElementById('home-date').textContent=`${now.getMonth()+1}月${now.getDate()}日`;
+  document.getElementById('home-weekday').textContent=`${now.getFullYear()}年　${days[now.getDay()]}`;
+  const m=now.getMonth(),y=now.getFullYear();
+  document.getElementById('qc-todo').textContent=state.todos.filter(t=>!t.done).length+'件';
+  document.getElementById('qc-events').textContent=state.events.filter(e=>{const d=new Date(e.date);return d.getMonth()===m&&d.getFullYear()===y;}).length+'件';
+  const mk=state.kakeibo.filter(k=>{const d=new Date(k.date);return d.getMonth()===m&&d.getFullYear()===y;});
+  const bal=mk.filter(k=>k.type==='income').reduce((a,k)=>a+k.amount,0)-mk.filter(k=>k.type==='expense').reduce((a,k)=>a+k.amount,0);
+  document.getElementById('qc-balance').textContent='¥'+bal.toLocaleString();
+  document.getElementById('qc-diary').textContent=state.diary.length+'件';
+  document.getElementById('qc-shopping').textContent=state.shopping.filter(s=>!s.checked).length+'件';
+}
+
+// CALENDAR
+function renderCalendar(){
+  const y=state.calYear,m=state.calMonth;
+  const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('cal-month-title').textContent=`${y}年 ${mn[m]}`;
+  const grid=document.getElementById('cal-grid');grid.innerHTML='';
+  ['日','月','火','水','木','金','土'].forEach(d=>{const el=document.createElement('div');el.className='cal-dn';el.textContent=d;grid.appendChild(el);});
+  const first=new Date(y,m,1),last=new Date(y,m+1,0),today=new Date();
+  for(let i=0;i<first.getDay();i++){const d=new Date(y,m,-first.getDay()+1+i);const el=document.createElement('div');el.className='cal-day other-month';el.textContent=d.getDate();grid.appendChild(el);}
+  const eDays=new Set(state.events.filter(e=>{const d=new Date(e.date);return d.getMonth()===m&&d.getFullYear()===y;}).map(e=>new Date(e.date).getDate()));
+  for(let d=1;d<=last.getDate();d++){
+    const el=document.createElement('div');
+    const isT=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+    const dow=new Date(y,m,d).getDay();
+    let cls='cal-day';if(isT)cls+=' today';if(dow===0)cls+=' sunday';if(eDays.has(d))cls+=' has-event';
+    el.className=cls;el.textContent=d;grid.appendChild(el);
+  }
+  const list=document.getElementById('events-list');
+  const me=state.events.filter(e=>{const d=new Date(e.date);return d.getMonth()===m&&d.getFullYear()===y;}).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if(!me.length){list.innerHTML='<div class="empty-state">今月の予定はありません</div>';}
+  else{list.innerHTML=me.map((e,i)=>{const d=new Date(e.date);return `<div class="event-pill"><div class="event-dot"></div><div class="event-pill-date">${d.getMonth()+1}/${d.getDate()} ${'日月火水木金土'[d.getDay()]}</div><div class="event-pill-title">${e.title}</div>${e.time?`<div class="event-pill-time">${e.time}</div>`:''}<button class="btn btn-sm btn-danger" onclick="delEvent(${i})">削除</button></div>`;}).join('');}
+  document.getElementById('event-date').value=new Date().toISOString().split('T')[0];
+}
+function changeMonth(d){state.calMonth+=d;if(state.calMonth<0){state.calMonth=11;state.calYear--;}if(state.calMonth>11){state.calMonth=0;state.calYear++;}renderCalendar();}
+function addEvent(){
+  const t=document.getElementById('event-title').value.trim(),d=document.getElementById('event-date').value,ti=document.getElementById('event-time').value;
+  if(!t||!d){alert('タイトルと日付を入力してください');return;}
+  state.events.push({title:t,date:d,time:ti});save();
+  document.getElementById('event-title').value='';document.getElementById('event-time').value='';
+  renderCalendar();
+}
+function delEvent(i){state.events.splice(i,1);save();renderCalendar();}
+
+// TODO
+function renderTodo(){
+  const list=document.getElementById('todo-list');
+  if(!state.todos.length){list.innerHTML='<div class="empty-state">タスクを追加してみましょう ✨</div>';document.getElementById('todo-prog').style.width='0%';return;}
+  list.innerHTML=state.todos.map((t,i)=>`<div class="todo-item"><div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${i})"></div><div class="todo-text ${t.done?'done':''}">${t.text}</div><button class="todo-del" onclick="delTodo(${i})">✕</button></div>`).join('');
+  const done=state.todos.filter(t=>t.done).length,total=state.todos.length;
+  document.getElementById('todo-prog').style.width=(total?Math.round(done/total*100):0)+'%';
+  const m=done===total&&total>0?["全部終わりましたね！すごいじゃないですか。お疲れ様でした。","やりましたね！今日はよく頑張りました。","全部クリア！……さすがです。"]:['あと'+(total-done)+'件ですね。一つずつ、大丈夫ですよ。',"焦らず着実に。任せてもらえれば、後ろから支えますから。","できることから片付けていきましょう。"];
+  document.getElementById('todo-msg').textContent=m[Math.floor(Math.random()*m.length)];
+}
+function addTodo(){const i=document.getElementById('todo-input');const t=i.value.trim();if(!t)return;state.todos.push({text:t,done:false});save();i.value='';renderTodo();}
+function toggleTodo(i){state.todos[i].done=!state.todos[i].done;save();renderTodo();}
+function delTodo(i){state.todos.splice(i,1);save();renderTodo();}
+
+// KAKEIBO
+function renderKakeibo(){
+  const now=new Date(),m=now.getMonth(),y=now.getFullYear();
+  const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('k-sub').textContent=`${y}年${mn[m]}の収支`;
+  const items=state.kakeibo.filter(k=>{const d=new Date(k.date);return d.getMonth()===m&&d.getFullYear()===y;}).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const inc=items.filter(k=>k.type==='income').reduce((a,k)=>a+k.amount,0);
+  const exp=items.filter(k=>k.type==='expense').reduce((a,k)=>a+k.amount,0);
+  const bal=inc-exp;
+  document.getElementById('k-income').textContent='¥'+inc.toLocaleString();
+  document.getElementById('k-expense').textContent='¥'+exp.toLocaleString();
+  const bEl=document.getElementById('k-balance');bEl.textContent='¥'+bal.toLocaleString();bEl.className='k-stat-val '+(bal>=0?'bal-pos':'bal-neg');
+  const list=document.getElementById('kakeibo-list');
+  if(!items.length){list.innerHTML='<div class="empty-state">今月の記録はありません</div>';}
+  else{list.innerHTML=items.map(k=>{const d=new Date(k.date);const idx=state.kakeibo.indexOf(k);return `<div class="k-item"><span class="k-cat-tag">${k.cat}</span><span class="k-item-name">${k.memo||k.cat}</span><span class="k-item-date">${d.getMonth()+1}/${d.getDate()}</span><span class="k-amount ${k.type}">${k.type==='income'?'+':'-'}¥${k.amount.toLocaleString()}</span><button class="todo-del" onclick="delKakeibo(${idx})">✕</button></div>`;}).join('');}
+}
+function addKakeibo(){
+  const type=document.getElementById('k-type').value,cat=document.getElementById('k-cat').value;
+  const amount=parseInt(document.getElementById('k-amount').value),memo=document.getElementById('k-memo').value.trim();
+  if(!amount||isNaN(amount)){alert('金額を入力してください');return;}
+  state.kakeibo.push({type,cat,amount,memo,date:new Date().toISOString()});save();
+  document.getElementById('k-amount').value='';document.getElementById('k-memo').value='';
+  renderKakeibo();
+}
+function delKakeibo(i){state.kakeibo.splice(i,1);save();renderKakeibo();}
+
+// DIARY
+let selectedMood='';
+function selectMood(btn,mood){document.querySelectorAll('.mood-chip').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedMood=mood;}
+function renderDiary(){
+  const list=document.getElementById('diary-list');
+  if(!state.diary.length){list.innerHTML='<div class="card"><div class="empty-state">まだ日記がありません。今日のことを書いてみましょう ✍️</div></div>';return;}
+  list.innerHTML=[...state.diary].reverse().map((d,ri)=>{
+    const i=state.diary.length-1-ri;
+    const date=new Date(d.date);
+    const ds=`${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`;
+    const isL=d.comment==='__loading__';
+    const rc=isL?`<div class="dot-loading"><span></span><span></span><span></span></div>国広くんが読んでいます…`:d.comment;
+    return `<div class="diary-entry"><div class="diary-entry-header"><div class="diary-entry-date">${ds}</div><div class="diary-entry-meta">${d.mood?`<span class="diary-mood-badge">${d.mood}</span>`:''}<button class="todo-del" onclick="delDiary(${i})">✕</button></div></div><div class="diary-entry-text">${d.text}</div><div class="horikawa-reply"><div class="reply-avatar">⚔️</div><div class="reply-body"><div class="reply-name">堀川国広</div><div class="reply-text">${rc}</div></div></div></div>`;
+  }).join('');
+}
+async function addDiary(){
+  const text=document.getElementById('diary-input').value.trim();
+  if(!text){alert('日記を書いてみてください');return;}
+  const entry={text,mood:selectedMood,comment:'__loading__',date:new Date().toISOString()};
+  state.diary.push(entry);const idx=state.diary.length-1;save();
+  document.getElementById('diary-input').value='';
+  document.querySelectorAll('.mood-chip').forEach(b=>b.classList.remove('selected'));
+  const sm=selectedMood;selectedMood='';
+  renderDiary();
+  try{
+    const prompt=`あなたは刀剣乱舞の「堀川国広」です。以下のキャラクター設定を忠実に守って、ユーザーの日記に返信してください。
+
+【堀川国広の性格・口調】
+- 一人称は「僕」
+- 丁寧で穏やかだが、芯がある
+- 面倒見がよく、相手のことをよく気にかける
+- さりげなく励ます、たしなめる
+- 少し照れ屋で、でも素直に気持ちを伝える
+- 家事や日常生活が好き
+- 「〜ですよ」「〜ましょうね」「〜ませんか」など自然な敬語
+- 押しつけがましくなく、寄り添う言葉をかける
+
+【ユーザーの気分】${sm||'記載なし'}
+【日記の内容】
+${text}
+
+上記の日記を読んで、堀川国広として自然な一言〜三文程度のコメントを返してください。返信のみを出力し、前置きや説明は不要です。`;
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    state.diary[idx].comment=data.content?.[0]?.text?.trim()||getDiaryComment(text,sm);
+    save();renderDiary();
+  }catch(e){
+    state.diary[idx].comment=getDiaryComment(text,sm);
+    save();renderDiary();
+  }
+}
+function delDiary(i){state.diary.splice(i,1);save();renderDiary();}
+
+// SHOPPING
+const SHOP_CATS=['🥦 野菜','🥩 肉・魚','🥛 乳製品','🍞 パン・米','🧴 日用品','🍬 お菓子','🧊 冷凍食品','📦 その他'];
+let selectedShopCat='📦 その他';
+
+function renderShopping(){
+  // カテゴリチップ
+  const catEl=document.getElementById('shop-categories');
+  catEl.innerHTML=SHOP_CATS.map(c=>`<button class="shop-cat-chip ${selectedShopCat===c?'active':''}" onclick="selectShopCat(this,'${c}')">${c}</button>`).join('');
+
+  const unchecked=state.shopping.filter(s=>!s.checked);
+  const checked=state.shopping.filter(s=>s.checked);
+
+  // 未チェック一覧
+  const listEl=document.getElementById('shop-list');
+  if(!unchecked.length){
+    listEl.innerHTML='<div class="empty-state">買うものを追加してみましょう 🛒</div>';
+  } else {
+    listEl.innerHTML=unchecked.map(item=>{
+      const i=state.shopping.indexOf(item);
+      return `<div class="shop-item">
+        <div class="shop-check" onclick="toggleShop(${i})"></div>
+        <div class="shop-item-info">
+          <div class="shop-item-name">${item.name}</div>
+          <div class="shop-item-cat-tag">${item.cat}</div>
+        </div>
+        <div class="shop-qty">
+          <button class="shop-qty-btn" onclick="changeQty(${i},-1)">－</button>
+          <span class="shop-qty-num">${item.qty}</span>
+          <button class="shop-qty-btn" onclick="changeQty(${i},1)">＋</button>
+        </div>
+        <button class="todo-del" onclick="delShop(${i})">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  // チェック済み一覧
+  const checkedSection=document.getElementById('shop-checked-section');
+  const checkedList=document.getElementById('shop-checked-list');
+  if(!checked.length){
+    checkedSection.style.display='none';
+  } else {
+    checkedSection.style.display='block';
+    checkedList.innerHTML=checked.map(item=>{
+      const i=state.shopping.indexOf(item);
+      return `<div class="shop-item">
+        <div class="shop-check checked" onclick="toggleShop(${i})"></div>
+        <div class="shop-item-info">
+          <div class="shop-item-name checked">${item.name}</div>
+          <div class="shop-item-cat-tag">${item.cat}</div>
+        </div>
+        <span class="shop-qty-num" style="color:var(--text3);">×${item.qty}</span>
+        <button class="todo-del" onclick="delShop(${i})">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  // 堀川くんコメント
+  const total=state.shopping.length;
+  const doneCount=checked.length;
+  const msgs = doneCount===total&&total>0
+    ? ['全部カートに入りましたね！買いすぎていないか、レジ前に確認しましょうね。','お疲れ様です。これで買い忘れはないはずですよ。']
+    : total>0
+      ? [`あと${total-doneCount}品ですね。焦らずいきましょう。`,'リストがあると安心ですよね。僕も一緒に確認しますから。']
+      : ['必要なものを書き出しておくと、買い忘れが減りますよ。'];
+  document.getElementById('shop-msg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+}
+
+function selectShopCat(btn,cat){
+  selectedShopCat=cat;
+  document.querySelectorAll('.shop-cat-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function addShopItem(){
+  const input=document.getElementById('shop-input');
+  const name=input.value.trim();
+  if(!name)return;
+  state.shopping.push({name, cat:selectedShopCat, qty:1, checked:false});
+  save(); input.value=''; renderShopping();
+}
+
+function toggleShop(i){
+  state.shopping[i].checked=!state.shopping[i].checked;
+  save(); renderShopping();
+}
+
+function changeQty(i,delta){
+  state.shopping[i].qty=Math.max(1, state.shopping[i].qty+delta);
+  save(); renderShopping();
+}
+
+function delShop(i){state.shopping.splice(i,1);save();renderShopping();}
+
+function clearCheckedItems(){
+  state.shopping=state.shopping.filter(s=>!s.checked);
+  save(); renderShopping();
+}
+
+// INIT
+renderHome();
+document.getElementById('event-date').value=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
